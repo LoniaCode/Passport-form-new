@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Scholarix — Nigerian International Passport Application</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --green: #1a3ec4;
+      --dark-green: #102899;
+      --gold: #F5C200;
+      --light-gold: #FFF8D6;
+      --cream: #F5F7FF;
+      --dark: #1A1A1A;
+      --notice-strong: #3A2800;
+      --mid: #555;
+      --border: #D0D6F0;
+      --error: #C0392B;
+      --radius: 10px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--dark);
+      min-height: 100vh;
+    }
+
+    /* Header */
+    header {
+      background: var(--green);
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 220px; height: 220px;
+      background: rgba(200,150,46,0.18);
+      border-radius: 50%;
+    }
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: -40px; left: 40px;
+      width: 120px; height: 120px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 50%;
+    }
+    .header-inner {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 36px 24px 32px;
+      position: relative;
+      z-index: 1;
+    }
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .logo-icon {
+      width: 46px; height: 46px;
+      background: var(--gold);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 22px; color: #fff;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      color: #fff;
+      letter-spacing: 0.3px;
+    }
+    .logo-tagline {
+      font-size: 12px;
+      color: rgba(255,255,255,0.65);
+      font-weight: 300;
+      margin-top: 2px;
+      letter-spacing: 0.5px;
+    }
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(20px, 4vw, 28px);
+      color: #fff;
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+    header p {
+      color: rgba(255,255,255,0.75);
+      font-size: 14px;
+      font-weight: 300;
+      line-height: 1.6;
+      max-width: 540px;
+    }
+    .flag-stripe {
+      display: flex;
+      height: 6px;
+    }
+    .flag-stripe span {
+      flex: 1;
+    }
+    .flag-stripe span:nth-child(1) { background: #1a3ec4; }
+    .flag-stripe span:nth-child(2) { background: #F5C200; }
+    .flag-stripe span:nth-child(3) { background: #1a3ec4; }
+
+    /* Form wrapper */
+    .form-wrap {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 32px 16px 60px;
+    }
+
+    /* Sections */
+    .section {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .section-header {
+      background: var(--dark-green);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-header .step-badge {
+      background: var(--gold);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 9px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .section-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 17px;
+      color: #fff;
+      font-weight: 600;
+    }
+    .section-body {
+      padding: 24px;
+    }
+
+    /* Grid layout */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }
+    .span-2 { grid-column: span 2; }
+    .span-3 { grid-column: span 3; }
+
+    @media (max-width: 600px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .span-2, .span-3 { grid-column: span 1; }
+    }
+
+    /* Form fields */
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--dark);
+      letter-spacing: 0.1px;
+    }
+    label .req {
+      color: var(--error);
+      margin-left: 2px;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="date"],
+    input[type="number"],
+    select,
+    textarea {
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      padding: 10px 13px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--dark);
+      background: var(--cream);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      width: 100%;
+      appearance: none;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(26,62,196,0.12);
+      background: #fff;
+    }
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23555' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 34px;
+      cursor: pointer;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    .field-hint {
+      font-size: 11.5px;
+      color: #888;
+      font-weight: 300;
+    }
+
+    /* Radio / checkbox groups */
+    .radio-group, .check-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 2px;
+    }
+    .radio-group label, .check-group label {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-weight: 400;
+      font-size: 14px;
+      cursor: pointer;
+      padding: 8px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .radio-group input[type="radio"],
+    .check-group input[type="checkbox"] {
+      width: auto;
+      accent-color: var(--green);
+    }
+    .radio-group label:has(input:checked),
+    .check-group label:has(input:checked) {
+      border-color: var(--green);
+      background: #EEF1FC;
+    }
+
+    /* File upload */
+    .file-upload {
+      border: 2px dashed var(--border);
+      border-radius: 7px;
+      padding: 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      background: var(--cream);
+      font-size: 13px;
+      color: var(--mid);
+    }
+    .file-upload:hover {
+      border-color: var(--green);
+      background: #EEF1FC;
+    }
+    .file-upload input[type="file"] {
+      display: none;
+    }
+    .file-upload .upload-icon {
+      font-size: 24px;
+      margin-bottom: 6px;
+    }
+
+    /* Info notice */
+    .notice {
+      background: var(--light-gold);
+      border-left: 4px solid var(--gold);
+      border-radius: 0 7px 7px 0;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: #6B4A00;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .notice strong { color: #3A2800; }
+
+    /* Divider */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 20px 0;
+    }
+
+    /* Submit */
+    .submit-area {
+      text-align: center;
+      margin-top: 28px;
+    }
+    .btn-submit {
+      background: var(--green);
+      color: #fff;
+      border: none;
+      padding: 15px 52px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      letter-spacing: 0.2px;
+      transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px rgba(26,62,196,0.25);
+    }
+    .btn-submit:hover {
+      background: var(--dark-green);
+      box-shadow: 0 6px 20px rgba(16,40,153,0.3);
+      transform: translateY(-1px);
+    }
+    .btn-submit:active { transform: translateY(0); }
+    .submit-note {
+      font-size: 12px;
+      color: #999;
+      margin-top: 12px;
+    }
+
+    /* Success overlay */
+    #success-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+    }
+    #success-overlay.show { display: flex; }
+    .success-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 44px 40px;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    }
+    .success-icon {
+      width: 64px; height: 64px;
+      background: #E8F7EE;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 30px;
+      margin: 0 auto 18px;
+    }
+    .success-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      color: var(--dark);
+      margin-bottom: 10px;
+    }
+    .success-card p {
+      font-size: 14px;
+      color: var(--mid);
+      line-height: 1.6;
+      margin-bottom: 22px;
+    }
+    .btn-close {
+      background: var(--green);
+      color: #fff;
+      border: none;
+      padding: 11px 32px;
+      border-radius: 7px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 12px;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="flag-stripe"><span></span><span></span><span></span></div>
+  <div class="header-inner">
+    <div class="logo-row">
+      <div class="logo-icon">S</div>
+      <div>
+        <div class="logo-text">Scholarix</div>
+        <div class="logo-tagline">Travel & Immigration Services</div>
+      </div>
+    </div>
+    <h1>Nigerian International Passport Application</h1>
+    <p>Complete all sections accurately. Your information will be used to process your passport application. All fields marked <span style="color:#F5E8C8">*</span> are required.</p>
+  </div>
+</header>
+
+<div class="form-wrap">
+  <div class="notice">
+    <strong>📋 Before you begin:</strong> Ensure you have your <strong>National Identification Number (NIN)</strong>, a valid email address, and scanned copies of your supporting documents ready. Information submitted must match your NIN records exactly.
+  </div>
+
+  <form id="passport-form" novalidate enctype="multipart/form-data">
+
+    <!-- SECTION 1: Application Type -->
+    <div class="section">
+      <div class="section-header">
+        <span class="step-badge">Step 1</span>
+        <h2>Application Type</h2>
+      </div>
+      <div class="section-body">
+        <div class="field">
+          <label>Type of Application <span class="req">*</span></label>
+          <div class="radio-group">
+            <label><input type="radio" name="app_type" value="Fresh" required> Fresh (First-Time)</label>
+            <label><input type="radio" name="app_type" value="Renewal"> Renewal</label>
+            <label><input type="radio" name="app_type" value="Lost/Stolen"> Lost / Stolen Replacement</label>
+            <label><input type="radio" name="app_type" value="Damaged"> Damaged Replacement</label>
+            <label><input type="radio" name="app_type" value="Data Correction"> Data Correction</label>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="field">
+          <label>Passport Validity & Pricing <span class="req">*</span></label>
+          <div class="radio-group" style="flex-direction:column;gap:12px;">
+            <label style="padding:14px 18px;border-radius:9px;align-items:flex-start;gap:12px;">
+              <input type="radio" name="booklet_type" value="32-Page 5-Year - ₦150,000" required style="margin-top:3px;">
+              <div>
+                <div style="font-weight:600;font-size:14px;color:var(--dark);">32-Page Booklet — 5-Year Validity</div>
+                <div style="font-size:13px;color:var(--mid);margin-top:3px;">Standard processing time &nbsp;|&nbsp; <strong style="color:var(--green);">₦150,000</strong></div>
+              </div>
+            </label>
+            <label style="padding:14px 18px;border-radius:9px;align-items:flex-start;gap:12px;">
+              <input type="radio" name="booklet_type" value="64-Page 10-Year - ₦255,000" style="margin-top:3px;">
+              <div>
+                <div style="font-weight:600;font-size:14px;color:var(--dark);">64-Page Booklet — 10-Year Validity</div>
+                <div style="font-size:13px;color:var(--mid);margin-top:3px;">Standard processing time &nbsp;|&nbsp; <strong style="color:var(--green);">₦255,000</strong></div>
+              </div>
+            </label>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="field">
+          <label>Processing Speed <span class="req">*</span></label>
+          <div class="radio-group" style="flex-direction:column;gap:12px;">
+            <label style="padding:14px 18px;border-radius:9px;align-items:flex-start;gap:12px;">
+              <input type="radio" name="processing_speed" value="Standard" required style="margin-top:3px;">
+              <div>
+                <div style="font-weight:600;font-size:14px;color:var(--dark);">Standard Processing</div>
+                <div style="font-size:13px;color:var(--mid);margin-top:3px;">Ready in 4–6 weeks &nbsp;|&nbsp; <strong style="color:var(--green);">No extra charge</strong></div>
+              </div>
+            </label>
+            <label style="padding:14px 18px;border-radius:9px;align-items:flex-start;gap:12px;">
+              <input type="radio" name="processing_speed" value="Express - +₦20,000" style="margin-top:3px;">
+              <div>
+                <div style="font-weight:600;font-size:14px;color:var(--dark);">⚡ Express Processing</div>
+                <div style="font-size:13px;color:var(--mid);margin-top:3px;">Ready in <strong>1 month</strong> &nbsp;|&nbsp; <strong style="color:var(--gold);">+₦20,000</strong></div>
+              </div>
+            </label>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="field">
+          <label>Applicant Category <span class="req">*</span></label>
+          <select name="applicant_category" required>
+            <option value="">— Select —</option>
+            <option>Adult (18 years and above)</option>
+            <option>Minor (Under 18 years)</option>
+            <option>Senior Citizen (60+)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2: Personal Information -->
+    <div class="section">
+      <div class="section-header">
+        <span class="step-badge">Step 2</span>
+        <h2>Personal Information</h2>
+      </div>
+      <div class="section-body">
+        <div class="grid-3">
+          <div class="field">
+            <label>Surname / Last Name <span class="req">*</span></label>
+            <input type="text" name="surname" placeholder="e.g. ADEYEMI" required />
+            <span class="field-hint">As on birth certificate / NIN</span>
+          </div>
+          <div class="field">
+            <label>First Name <span class="req">*</span></label>
+            <input type="text" name="first_name" placeholder="e.g. CHIOMA" required />
+          </div>
+          <div class="field">
+            <label>Middle Name</label>
+            <input type="text" name="middle_name" placeholder="Optional" />
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="grid-3">
+          <div class="field">
+            <label>Date of Birth <span class="req">*</span></label>
+            <input type="date" name="dob" required />
+          </div>
+          <div class="field">
+            <label>Gender <span class="req">*</span></label>
+            <select name="gender" required>
+              <option value="">— Select —</option>
+              <option>Male</option>
+              <option>Female</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Marital Status <span class="req">*</span></label>
+            <select name="marital_status" required>
+              <option value="">— Select —</option>
+              <option>Single</option>
+              <option>Married</option>
+              <option>Divorced</option>
+              <option>Widowed</option>
+            </select>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="grid-2">
+          <div class="field">
+            <label>National Identification Number (NIN) <span class="req">*</span></label>
+            <input type="text" name="nin" placeholder="11-digit NIN" maxlength="11" required />
+            <span class="field-hint">Mandatory for all applicants</span>
+          </div>
+          <div class="field">
+            <label>Place of Birth <span class="req">*</span></label>
+            <input type="text" name="place_of_birth" placeholder="City / Town" required />
+          </div>
+          <div class="field">
+            <label>State of Origin <span class="req">*</span></label>
+            <select name="state_of_origin" required>
+              <option value="">— Select State —</option>
+              <option>Abia</option><option>Adamawa</option><option>Akwa Ibom</option>
+              <option>Anambra</option><option>Bauchi</option><option>Bayelsa</option>
+              <option>Benue</option><option>Borno</option><option>Cross River</option>
+              <option>Delta</option><option>Ebonyi</option><option>Edo</option>
+              <option>Ekiti</option><option>Enugu</option><option>FCT - Abuja</option>
+              <option>Gombe</option><option>Imo</option><option>Jigawa</option>
+              <option>Kaduna</option><option>Kano</option><option>Katsina</option>
+              <option>Kebbi</option><option>Kogi</option><option>Kwara</option>
+              <option>Lagos</option><option>Nasarawa</option><option>Niger</option>
+              <option>Ogun</option><option>Ondo</option><option>Osun</option>
+              <option>Oyo</option><option>Plateau</option><option>Rivers</option>
+              <option>Sokoto</option><option>Taraba</option><option>Yobe</option>
+              <option>Zamfara</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Local Government Area (LGA) <span class="req">*</span></label>
+            <input type="text" name="lga" placeholder="Your LGA" required />
+          </div>
+          <div class="field span-2">
+            <label>Nationality <span class="req">*</span></label>
+            <select name="nationality" required>
+              <option value="Nigerian" selected>Nigerian</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 3: Contact Information -->
+    <div class="section">
+      <div class="section-header">
+        <span class="step-badge">Step 3</span>
+        <h2>Contact Information</h2>
+      </div>
+      <div class="section-body">
+        <div class="grid-2">
+          <div class="field">
+            <label>Email Address <span class="req">*</span></label>
+            <input type="email" name="email" placeholder="example@email.com" required />
+          </div>
+          <div class="field">
+            <label>Phone Number <span class="req">*</span></label>
+            <input type="tel" name="phone" placeholder="+234 000 0000 000" required />
+          </div>
+          <div class="field">
+            <label>Alternate Phone Number</label>
+            <input type="tel" name="alt_phone" placeholder="+234 000 0000 000" />
+          </div>
+          <div class="field">
+            <label>WhatsApp Number <span class="req">*</span></label>
+            <input type="tel" name="whatsapp" placeholder="+234 000 0000 000" required />
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="field">
+          <label>Residential Address <span class="req">*</span></label>
+          <textarea name="address" placeholder="House number, street name, area..." required></textarea>
+        </div>
+        <div class="grid-3">
+          <div class="field">
+            <label>City <span class="req">*</span></label>
+            <input type="text" name="city" required />
+          </div>
+          <div class="field">
+            <label>State of Residence <span class="req">*</span></label>
+            <select name="state_residence" required>
+              <option value="">— Select —</option>
+              <option>Abia</option><option>Adamawa</option><option>Akwa Ibom</option>
+              <option>Anambra</option><option>Bauchi</option><option>Bayelsa</option>
+              <option>Benue</option><option>Borno</option><option>Cross River</option>
+              <option>Delta</option><option>Ebonyi</option><option>Edo</option>
+              <option>Ekiti</option><option>Enugu</option><option>FCT - Abuja</option>
+              <option>Gombe</option><option>Imo</option><option>Jigawa</option>
+              <option>Kaduna</option><option>Kano</option><option>Katsina</option>
+              <option>Kebbi</option><option>Kogi</option><option>Kwara</option>
+              <option>Lagos</option><option>Nasarawa</option><option>Niger</option>
+              <option>Ogun</option><option>Ondo</option><option>Osun</option>
+              <option>Oyo</option><option>Plateau</option><option>Rivers</option>
+              <option>Sokoto</option><option>Taraba</option><option>Yobe</option>
+              <option>Zamfara</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Country</label>
+            <input type="text" name="country" value="Nigeria" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- SECTION 4: Next of Kin -->
+    <div class="section">
+      <div class="section-header">
+        <span class="step-badge">Step 4</span>
+        <h2>Next of Kin / Emergency Contact</h2>
+      </div>
+      <div class="section-body">
+        <div class="grid-2">
+          <div class="field">
+            <label>Full Name <span class="req">*</span></label>
+            <input type="text" name="nok_name" required />
+          </div>
+          <div class="field">
+            <label>Relationship <span class="req">*</span></label>
+            <select name="nok_relationship" required>
+              <option value="">— Select —</option>
+              <option>Father</option><option>Mother</option><option>Spouse</option>
+              <option>Sibling</option><option>Child</option><option>Guardian</option><option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Phone Number <span class="req">*</span></label>
+            <input type="tel" name="nok_phone" required />
+          </div>
+          <div class="field">
+            <label>Email Address</label>
+            <input type="email" name="nok_email" />
+          </div>
+          <div class="field span-2">
+            <label>Address</label>
+            <input type="text" name="nok_address" placeholder="Next of kin's residential address" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+    <!-- SECTION 5: Declaration & Consent -->
+    <div class="section">
+      <div class="section-header">
+        <span class="step-badge">Step 5</span>
+        <h2>Declaration & Consent</h2>
+      </div>
+      <div class="section-body">
+        <div class="field">
+          <div class="check-group" style="flex-direction:column;">
+            <label>
+              <input type="checkbox" name="declaration_1" required />
+              I confirm that all information provided in this form is true, accurate, and matches my official documents.
+            </label>
+            <label>
+              <input type="checkbox" name="declaration_2" required />
+              I authorize Scholarix to use my information solely for the purpose of processing my passport application.
+            </label>
+            <label>
+              <input type="checkbox" name="declaration_3" required />
+              I understand that providing false information may result in rejection of my application.
+            </label>
+            <label>
+              <input type="checkbox" name="declaration_4" required />
+              I agree to Scholarix's <a href="#" style="color:var(--green)">Terms of Service</a> and <a href="#" style="color:var(--green)">Privacy Policy</a>.
+            </label>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="grid-2">
+          <div class="field">
+            <label>Applicant's Full Name (Signature Confirmation) <span class="req">*</span></label>
+            <input type="text" name="signature_name" placeholder="Type your full name" required />
+          </div>
+          <div class="field">
+            <label>Date <span class="req">*</span></label>
+            <input type="date" name="signature_date" required />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="submit-area">
+      <button type="submit" class="btn-submit">Submit Application →</button>
+      <p class="submit-note">Our team will contact you within 24–48 hours to confirm your application and next steps.</p>
+    </div>
+
+  </form>
+</div>
+
+<footer>
+  © 2025 Scholarix. All rights reserved. This form is secure and your data is handled with strict confidentiality.
+</footer>
+
+<!-- Success Modal -->
+<div id="success-overlay">
+  <div class="success-card">
+    <div class="success-icon">✅</div>
+    <h3>Application Submitted!</h3>
+    <p>Thank you for applying through Scholarix. We have received your passport application and will reach out to you within <strong>24–48 hours</strong> to confirm the next steps.</p>
+    <button class="btn-close" onclick="document.getElementById('success-overlay').classList.remove('show')">Close</button>
+  </div>
+</div>
+
+<script>
+  // File upload label update
+  document.querySelectorAll('.file-upload input[type="file"]').forEach(input => {
+    input.addEventListener('change', function() {
+      const label = this.closest('.file-upload');
+      const div = label.querySelector('div:nth-child(2)');
+      if (this.files.length > 0) {
+        div.textContent = this.files[0].name;
+        label.style.borderColor = 'var(--green)';
+        label.style.background = '#EEF1FC';
+      }
+    });
+  });
+
+  // Form submit
+  document.getElementById('passport-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    // Basic validation
+    const required = this.querySelectorAll('[required]');
+    let valid = true;
+    required.forEach(el => {
+      if (el.type === 'radio') {
+        const group = document.querySelectorAll(`[name="${el.name}"]`);
+        const checked = Array.from(group).some(r => r.checked);
+        if (!checked) { valid = false; el.closest('.radio-group').style.outline = '2px solid #C0392B'; }
+        else { el.closest('.radio-group').style.outline = 'none'; }
+      } else if (el.type === 'checkbox') {
+        if (!el.checked) { valid = false; el.style.accentColor = '#C0392B'; }
+      } else {
+        if (!el.value.trim()) {
+          valid = false;
+          el.style.borderColor = '#C0392B';
+          el.addEventListener('input', () => el.style.borderColor = '', { once: true });
+        }
+      }
+    });
+
+    if (!valid) {
+      const first = this.querySelector('[required]:invalid, [required][value=""]');
+      if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    // Submit to Formspree
+    const btn = this.querySelector('.btn-submit');
+    btn.textContent = 'Submitting...';
+    btn.disabled = true;
+
+    try {
+      const formData = new FormData(this);
+      const response = await fetch('https://formspree.io/f/mpqjvbza', {
+        method: 'POST',
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (response.ok) {
+        document.getElementById('success-overlay').classList.add('show');
+        this.reset();
+      } else {
+        const data = await response.json();
+        alert('Submission failed: ' + (data.error || 'Please try again.'));
+      }
+    } catch (err) {
+      alert('Network error. Please check your connection and try again.');
+    }
+
+    btn.textContent = 'Submit Application →';
+    btn.disabled = false;
+  });
+</script>
+</body>
+</html>
